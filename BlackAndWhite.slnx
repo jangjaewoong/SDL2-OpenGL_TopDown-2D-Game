@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BlackAndWhite/BlackAndWhite.vcxproj" Id="b3f8b992-86ca-4f7d-8a78-4be0850c7d59" />
+</Solution>
