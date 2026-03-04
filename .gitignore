@@ -361,3 +361,24 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# Build results
+x64/
+x86/
+Debug/
+Release/
+
+# VS 설정 파일
+.vs/
+
+# vcpkg
+vcpkg/
+vcpkg_installed/
+
+# 컴파일 결과물
+*.obj
+*.exe
+*.pdb
+*.ilk
+*.exp
+*.lib
