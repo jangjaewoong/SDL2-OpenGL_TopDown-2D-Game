@@ -128,6 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="GameLevel.cpp" />
+    <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -137,6 +139,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameLevel.h" />
+    <ClInclude Include="GameObject.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpriteRenderer.h" />
@@ -147,7 +151,17 @@
     <None Include="vertex.glsl" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\..\..\..\Downloads\background.jpg" />
+    <Image Include="block.png" />
+    <Image Include="block_solid.png" />
+    <Image Include="paddle.png" />
     <Image Include="PePE.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="two.lvl" />
+    <Text Include="four.lvl" />
+    <Text Include="three.lvl" />
+    <Text Include="one.lvl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

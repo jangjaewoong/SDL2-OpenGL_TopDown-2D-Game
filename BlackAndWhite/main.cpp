@@ -40,11 +40,20 @@ int main(int argc, char* argv[]) {
 
     SDL_Event event;
     bool running = true;
+    Uint32 lastFrame = SDL_GetTicks();
     while (running)
     {
+        Uint32 currentFrame = SDL_GetTicks();
+        float deltaTime = (currentFrame - lastFrame) / 1000.0f; // ms → 초
+        lastFrame = currentFrame;
         while (SDL_PollEvent(&event))
             if (event.type == SDL_QUIT) running = false;
-
+            if (event.type == SDL_KEYDOWN)
+                if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
+                    running = false;
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        game.ProcessInput(deltaTime);  // ← 추가
+        game.Update(deltaTime);        // ← 추가
         game.Render();
         SDL_GL_SwapWindow(window);  
     }
