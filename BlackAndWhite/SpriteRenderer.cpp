@@ -1,6 +1,6 @@
 #include "SpriteRenderer.h"
 
-SpriteRenderer::SpriteRenderer(Shader& shader) : shader{shader}
+SpriteRenderer::SpriteRenderer(Shader& shader, Camera* camera) : shader(shader), camera(camera)
 {
     this->initRenderData();
 }
@@ -37,7 +37,7 @@ void SpriteRenderer::initRenderData()
 }
 
 void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position,
-    glm::vec2 size, float rotate, glm::vec3 color)
+    glm::vec2 size, float rotate, glm::vec3 color, glm::vec2 uvOffset, glm::vec2 uvScale)
 {
     this->shader.Use();
 
@@ -50,6 +50,9 @@ void SpriteRenderer::DrawSprite(Texture2D& texture, glm::vec2 position,
     
     this->shader.SetMatrix4("model", model);
     this->shader.SetVector3f("spriteColor", color);
+    this-> shader.SetVector2f("uvOffset", uvOffset);
+    this-> shader.SetVector2f("uvScale", uvScale);
+    this->shader.SetMatrix4("view", camera->GetViewMatrix());
 
     glActiveTexture(GL_TEXTURE0);
     texture.Bind();

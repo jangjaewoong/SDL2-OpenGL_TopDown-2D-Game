@@ -2,7 +2,7 @@
 #define CLASS_GAMELEVEL_H
 
 #include <vector>
-
+#include <map>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
@@ -12,12 +12,13 @@
 
 class GameLevel {
 public:
-	std::vector<GameObject> Bricks;
+
+	std::vector<GameObject> Tiles;
 	GameLevel() {};
-	void Load(const char* file, unsigned int levelWidth, unsigned int levelHeight);
-	void Draw(SpriteRenderer& renderer);
-	bool IsCompleted();
+
+	void Load(const char* file, int layerIndex, unsigned int TileSizeX, unsigned int TileSizeY);
+	void Draw(SpriteRenderer& renderer, Camera* camera, glm::vec2 screenSize);
 private:
-	void init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight);
+	void init(std::vector<std::vector<unsigned int>> tileData, unsigned int TileSizeX, unsigned int TileSizeY);
 };
 #endif

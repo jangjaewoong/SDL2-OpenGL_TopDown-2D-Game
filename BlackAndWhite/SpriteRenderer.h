@@ -9,18 +9,20 @@
 
 #include "Shader.h"
 #include "Texture2D.h"
+#include "Camera.h"
 class SpriteRenderer
 {
 public:
-	SpriteRenderer(Shader &shader);
+	SpriteRenderer(Shader &shader, Camera* camera);
 	~SpriteRenderer();
 
-	void DrawSprite(Texture2D &texture, glm::vec2 position,
-		glm::vec2 size = glm::vec2(10.0f, 10.0f), float rotate = 0.0f,
-		glm::vec3 color = glm::vec3(1.0f));
+	void DrawSprite(Texture2D& texture, glm::vec2 position,
+		glm::vec2 size, float rotate = 0.0f, glm::vec3 color = {1.0f, 1.0f, 1.0f},
+		glm::vec2 uvOffset = { 0.0f,0.0f }, glm::vec2 uvScale = { 1.0f,1.0f } );
 private:
 	std::vector<float> vertices;
 	Shader shader;
+	Camera* camera;
 	unsigned int SpriteVAO;
 	void initRenderData();
 };

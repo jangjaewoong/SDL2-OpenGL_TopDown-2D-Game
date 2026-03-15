@@ -1,81 +1,113 @@
 #include "GameLevel.h"
+#include <nlohmann/json.hpp>
 #include <fstream>
 #include <sstream>
 
-void GameLevel::Load(const char* file, unsigned int levelWidth, unsigned int levelHeight)
+
+
+
+void GameLevel::Load(const char* file, int layerIndex, unsigned int TileSizeX, unsigned int TileSizeY)
 {
-	this->Bricks.clear();
-	unsigned int tileCode;
-	GameLevel level;
-	std::string line;
-	std::ifstream fstream(file);
-	std::vector<std::vector<unsigned int>> tileData;
-    if (fstream)
-    {
-        while (std::getline(fstream, line)) // read each line from level file
-        {
-            std::istringstream sstream(line);
-            std::vector<unsigned int> row;
-            while (sstream >> tileCode) // read each word separated by spaces
-                row.push_back(tileCode);
-            tileData.push_back(row);
-        }
-        if (tileData.size() > 0)
-            this->init(tileData, levelWidth, levelHeight);
+    this->Tiles.clear();
+
+    std::ifstream f(file);
+    if (!f) {
+        std::cerr << "Failed to Open Map Data: " << file << std::endl;
+        return;
+    }
+
+    nlohmann::json j = nlohmann::json::parse(f);
+    int mapWidth = j["width"]; // 키로 값 접근 j["키이름"] (최상위 객체)
+    int mapHeight = j["height"];
+
+    // tilelayer만 추출
+    std::vector<nlohmann::json> tileLayers;
+    for (auto& layer : j["layers"]) {
+        if (layer["type"] == "tilelayer")
+            tileLayers.push_back(layer);
+    }
+
+    if (layerIndex >= (int)tileLayers.size()) {
+        std::cerr << "Layer index out of range" << std::endl;
+        return;
+    }
+
+    auto& layer = tileLayers[layerIndex];
+    std::vector<int> flatData = layer["data"].get<std::vector<int>>(); // data 키 내부 값을 vector로 변환하는 json함수
+
+    std::vector<std::vector<unsigned int>> tileData(
+        mapHeight, std::vector<unsigned int>(mapWidth, (unsigned int)-1)); // 벡터 unsigned int -1(실제론 int의 최댓값, 관용적으로 많이씀)로 초기화 후 실제 타일 있는 곳만 GID 값으로 덮어씀
+
+
+    for (int i = 0; i < (int)flatData.size(); i++) { // json형태의 data는 1차원이기 때문에 2차원으로 변환해줌.
+        if (flatData[i] == 0) continue;
+        tileData[i / mapWidth][i % mapWidth] = flatData[i];
+    }
+
+    this->init(tileData, TileSizeX, TileSizeY);
+}
+
+void GameLevel::Draw(SpriteRenderer& renderer, Camera* camera, glm::vec2 screenSize)
+{
+    float left = camera->position.x - screenSize.x / 2;
+    float right = camera->position.x + screenSize.x / 2;
+    float top = camera->position.y - screenSize.y / 2;
+    float bottom = camera->position.y + screenSize.y / 2;
+
+    for (GameObject& tile : this->Tiles) {
+        // 화면 밖이면 스킵
+        if (tile.Position.x + tile.Size.x < left)  continue;
+        if (tile.Position.x > right)                continue;
+        if (tile.Position.y + tile.Size.y < top)    continue;
+        if (tile.Position.y > bottom)               continue;
+
+        tile.Draw(renderer);
     }
 }
 
-void GameLevel::Draw(SpriteRenderer& renderer)
-{
-    for (GameObject& tile : this->Bricks)
-        if (!tile.Destroyed)
-            tile.Draw(renderer);
-}
 
-bool GameLevel::IsCompleted()
-{
-    for (GameObject& tile : this->Bricks)
-        if (!tile.IsSolid && !tile.Destroyed)
-            return false;
-    return true;
-}
 
-void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int levelWidth, unsigned int levelHeight)
+void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned int TileSizeX, unsigned int TileSizeY)
 {
-    // calculate dimensions
     unsigned int height = tileData.size();
-    unsigned int width = tileData[0].size(); // note we can index vector at [0] since this function is only called if height > 0
-    float unit_width = levelWidth / width, unit_height = levelHeight / height;
-    // initialize level tiles based on tileData		
+    unsigned int width = tileData[0].size();
+
     for (unsigned int y = 0; y < height; ++y)
     {
         for (unsigned int x = 0; x < width; ++x)
         {
-            // check block type from level data (2D level array)
-            if (tileData[y][x] == 1) // solid
             {
-                glm::vec2 pos(unit_width * x, unit_height * y);
-                glm::vec2 size(unit_width, unit_height);
-                GameObject obj(pos, size, ResourceManager::GetTexture("block_solid"), glm::vec3(0.8f, 0.8f, 0.7f));
-                obj.IsSolid = true;
-                this->Bricks.push_back(obj);
-            }
-            else if (tileData[y][x] > 1)	// non-solid; now determine its color based on level data
-            {
-                glm::vec3 color = glm::vec3(1.0f); // original: white
-                if (tileData[y][x] == 2)
-                    color = glm::vec3(0.2f, 0.6f, 1.0f);
-                else if (tileData[y][x] == 3)
-                    color = glm::vec3(0.0f, 0.7f, 0.0f);
-                else if (tileData[y][x] == 4)
-                    color = glm::vec3(0.8f, 0.8f, 0.4f);
-                else if (tileData[y][x] == 5)
-                    color = glm::vec3(1.0f, 0.5f, 0.0f);
+                unsigned int gid = tileData[y][x]; // 원본 GID
+                if (gid == (unsigned int)-1) continue; // ← 이거 추가!
+                if (gid >= 235) {
+                    // 애니메이션 타일
+                    std::string texKey;
+                    if (gid <= 242) texKey = "water";
+                    else if (gid <= 250) texKey = "water_edge";
+                    else if (gid <= 258) texKey = "waterplant1";
+                    else                 texKey = "waterplant2";
 
-                glm::vec2 pos(unit_width * x, unit_height * y);
-                glm::vec2 size(unit_width, unit_height);
-                this->Bricks.push_back(GameObject(pos, size, ResourceManager::GetTexture("block"), color));
+                    glm::vec2 pos(TileSizeX * x, TileSizeY * y);
+                    glm::vec2 size(TileSizeX, TileSizeY);
+                    Texture2D tex = ResourceManager::GetTexture(texKey);
+                    GameObject obj(pos, size, tex, glm::vec2(0, 0), glm::vec2(1, 1), glm::vec3(1, 1, 1));
+                    obj.sheet = new SpriteSheet(tex, 8, 1);
+                    obj.frameInterval = 0.12f;
+                    this->Tiles.push_back(obj);
+                    continue;
+                }
+
+                // 일반 타일 (GID 1~234)
+                std::string key = std::to_string(gid - 1); // 여기서 -1
+                Texture2D tex = ResourceManager::GetTexture(key);
+                if (tex.ID == 0) continue;
+
+                glm::vec2 pos(TileSizeX * x, TileSizeY * y);
+                glm::vec2 size(TileSizeX, TileSizeY);
+                GameObject obj(pos, size, tex, glm::vec2(0, 0), glm::vec2(1, 1), glm::vec3(1, 1, 1));
+                this->Tiles.push_back(obj);
             }
+           
         }
     }
 }

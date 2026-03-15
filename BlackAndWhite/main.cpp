@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     SDL_Window* window = SDL_CreateWindow(
         "BlackAndWhite",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        800, 600,
+        1280, 1280,
         SDL_WINDOW_OPENGL 
     );
 
@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     std::cout << "OpenGL Version: "
         << glGetString(GL_VERSION) << std::endl;
 
-    Game game(800, 600);
+    Game game(1280, 1280);
     game.Init();
 
     SDL_Event event;
@@ -51,8 +51,9 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_KEYDOWN)
                 if (event.key.keysym.scancode == SDL_SCANCODE_ESCAPE)
                     running = false;
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        game.ProcessInput(deltaTime);  // ← 추가
+        glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
+
         game.Update(deltaTime);        // ← 추가
         game.Render();
         SDL_GL_SwapWindow(window);  

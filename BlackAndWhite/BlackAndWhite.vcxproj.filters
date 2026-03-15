@@ -16,7 +16,7 @@
     <Filter Include="리소스 파일\Images">
       <UniqueIdentifier>{a020e401-06d2-4e4a-8ee2-ee7b1aaebea7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="리소스 파일\Levels">
+    <Filter Include="리소스 파일\Maps">
       <UniqueIdentifier>{94cd7cf5-11b7-40ad-bc68-6ed83f8ba589}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
@@ -48,6 +48,18 @@
     <ClCompile Include="GameLevel.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="SpriteSheet.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Animator.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Shader.h">
@@ -71,6 +83,18 @@
     <ClInclude Include="GameLevel.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="SpriteSheet.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Animator.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="vertex.glsl">
@@ -79,36 +103,5 @@
     <None Include="fragment.glsl">
       <Filter>리소스 파일</Filter>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="block.png">
-      <Filter>리소스 파일\Images</Filter>
-    </Image>
-    <Image Include="block_solid.png">
-      <Filter>리소스 파일\Images</Filter>
-    </Image>
-    <Image Include="paddle.png">
-      <Filter>리소스 파일\Images</Filter>
-    </Image>
-    <Image Include="PePE.jpg">
-      <Filter>리소스 파일\Images</Filter>
-    </Image>
-    <Image Include="..\..\..\..\Downloads\background.jpg">
-      <Filter>리소스 파일\Images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="two.lvl">
-      <Filter>리소스 파일\Levels</Filter>
-    </Text>
-    <Text Include="four.lvl">
-      <Filter>리소스 파일\Levels</Filter>
-    </Text>
-    <Text Include="three.lvl">
-      <Filter>리소스 파일\Levels</Filter>
-    </Text>
-    <Text Include="one.lvl">
-      <Filter>리소스 파일\Levels</Filter>
-    </Text>
   </ItemGroup>
 </Project>
