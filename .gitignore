@@ -382,3 +382,7 @@ vcpkg_installed/
 *.ilk
 *.exp
 *.lib
+
+Images/Tiles/*
+Images/Characters/*
+Maps/
