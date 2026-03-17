@@ -20,11 +20,12 @@ public:
 	glm::vec2 uvOffset;
 	glm::vec2 uvScale;
 	float Rotation;
+	bool isSolid;
 
 	Texture2D Sprite;
 	Animator* animator = nullptr;
 	GameObject();
-	GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec2 uvOffset = glm::vec2(0.0f,0.0f), glm::vec2 uvScale= glm::vec2(1.0f, 1.0f), glm::vec3 color= glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2 velocity= glm::vec2(0.0f, 0.0f));
+	GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec2 uvOffset = glm::vec2(0.0f, 0.0f), glm::vec2 uvScale = glm::vec2(1.0f, 1.0f), glm::vec3 color = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f), bool isSolid = false);
 
 	void Update(float dt);
 	virtual void Draw(SpriteRenderer& renderer);

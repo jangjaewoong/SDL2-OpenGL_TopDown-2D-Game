@@ -3,8 +3,12 @@
 #include <fstream>
 #include <sstream>
 
-
-
+struct TileInfo {
+    unsigned int gid = (unsigned int)-1;
+    bool flipH = false;
+    bool flipV = false;
+    bool flipD = false;
+};
 
 void GameLevel::Load(const char* file, int layerIndex, unsigned int TileSizeX, unsigned int TileSizeY)
 {
@@ -33,6 +37,7 @@ void GameLevel::Load(const char* file, int layerIndex, unsigned int TileSizeX, u
     }
 
     auto& layer = tileLayers[layerIndex];
+    this->layerName = layer["name"];
     std::vector<int> flatData = layer["data"].get<std::vector<int>>(); // data 키 내부 값을 vector로 변환하는 json함수
 
     std::vector<std::vector<unsigned int>> tileData(
@@ -93,6 +98,7 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                     GameObject obj(pos, size, tex, glm::vec2(0, 0), glm::vec2(1, 1), glm::vec3(1, 1, 1));
                     obj.sheet = new SpriteSheet(tex, 8, 1);
                     obj.frameInterval = 0.12f;
+                    obj.isSolid = true;
                     this->Tiles.push_back(obj);
                     continue;
                 }
@@ -105,6 +111,8 @@ void GameLevel::init(std::vector<std::vector<unsigned int>> tileData, unsigned i
                 glm::vec2 pos(TileSizeX * x, TileSizeY * y);
                 glm::vec2 size(TileSizeX, TileSizeY);
                 GameObject obj(pos, size, tex, glm::vec2(0, 0), glm::vec2(1, 1), glm::vec3(1, 1, 1));
+                bool solid = (solidGIDs.count(key) > 0);
+                obj.isSolid = solid;
                 this->Tiles.push_back(obj);
             }
            

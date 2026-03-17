@@ -6,8 +6,8 @@ GameObject::GameObject()
     uvOffset(0.0f), uvScale(1.0f, 1.0f),
     Sprite() {}
 
-GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec2 uvOffset, glm::vec2 uvScale, glm::vec3 color, glm::vec2 velocity)
-	: Position(pos), Size(size), Velocity(velocity), Color(color), Rotation(0.0f), uvOffset(uvOffset), uvScale(uvScale), Sprite(sprite) {
+GameObject::GameObject(glm::vec2 pos, glm::vec2 size, Texture2D sprite, glm::vec2 uvOffset, glm::vec2 uvScale, glm::vec3 color, glm::vec2 velocity, bool isSolid)
+	: Position(pos), Size(size), Velocity(velocity), Color(color), Rotation(0.0f), uvOffset(uvOffset), uvScale(uvScale), Sprite(sprite), isSolid(isSolid) {
 }
 
 void GameObject::Update(float dt) {

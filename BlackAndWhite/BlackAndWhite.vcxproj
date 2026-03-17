@@ -153,6 +153,7 @@
     <ClInclude Include="SpriteRenderer.h" />
     <ClInclude Include="SpriteSheet.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="Tile.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="fragment.glsl" />
